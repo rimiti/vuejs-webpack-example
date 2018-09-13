@@ -1,0 +1,62 @@
+image: docker:stable
+
+services:
+- docker:dind
+
+stages:
+- test
+- deploy-sandbox
+- deploy-preproduction
+- deploy-production
+
+.before_deploy: &before_deploy
+  before_script:
+  - apk add --update python python-dev py-pip build-base nodejs yarn
+  - yarn global add netlify-cli
+
+Run tests:
+  stage: test
+  script:
+  - apk add py-pip --no-cache
+  - pip install docker-compose
+  - docker-compose -f docker-compose-test.yml up --abort-on-container-exit
+  artifacts:
+    name: dist
+    paths:
+    - dist
+
+Deploy to production:
+  stage: deploy-production
+  environment:
+    name: production
+    url: https://fundlyup.com
+  <<: *before_deploy
+  script:
+  - netlify deploy -s <website_uuid> -p dist -t $NETLIFY_DEPLOY_TOKEN -e production
+  only:
+  - master
+  - coming-soon
+  when: manual
+
+Deploy to preproduction:
+  stage: deploy-preproduction
+  environment:
+    name: preproduction
+    url: https://preproduction.fundlyup.com
+  <<: *before_deploy
+  script:
+  - netlify deploy -s <website_uuid> -p dist -t $NETLIFY_DEPLOY_TOKEN -e preproduction
+  only:
+  - master
+  - coming-soon
+  when: manual
+
+Deploy to sandbox:
+  stage: deploy-sandbox
+  environment:
+    name: sandbox
+    url: https://sandbox.fundlyup.com
+  <<: *before_deploy
+  script:
+  - netlify deploy -s <website_uuid> -p dist -t $NETLIFY_DEPLOY_TOKEN -e sandbox
+  when: on_success
