@@ -1,6 +1,6 @@
 # vuejs-webpack-example
 
-> VueJS + Webpack + Gitlab + Docker example. 
+> Demonstration of VueJS + Webpack (upgraded) + Docker + Gitlab + Netlify.
 
 ## Build Setup
 
@@ -29,3 +29,6 @@ $ npm test
 # run all tests in Docker environment
 $ npm run docker:tests
 ```
+
+## License
+MIT © [Dimitri DO BAIRRO](https://github.com/rimiti/vuejs-webpack-example/blob/master/LICENSE)
