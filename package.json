@@ -11,7 +11,8 @@
     "tests:unit": "jest --config test/unit/jest.conf.js --coverage",
     "tests:e2e": "nightwatch --env chrome --config test/e2e/nightwatch.conf.js",
     "lint": "eslint src test/unit test/e2e/specs",
-    "build": "node build/build.js"
+    "build": "node build/build.js",
+    "docker:tests": "docker-compose -f docker-compose-test.yml up --abort-on-container-exit"
   },
   "dependencies": {
     "vue": "^2.5.17",
